@@ -1,0 +1,36 @@
+.sensor-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  max-width: 300px;
+  background-color: #f9f9f9;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sensor-id {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.sensor-temp,
+.sensor-humidity,
+.sensor-aqi {
+  margin-bottom: 4px;
+}
+
+.sensor-timestamp {
+  font-size: 0.8em;
+  color: #666;
+}
+.good {
+  color: green;
+}
+
+.warn {
+  color: orange;
+}
+
+.bad {
+  color: red;
+}
