@@ -4,6 +4,7 @@ import { SensorData } from '../types/SensorData';
 import { DashboardState } from '../types/DashboardState';
 import Card from './Card';
 import FilterControls from './FilterControls';
+import './Dashboard.css';
 
 const initialState: DashboardState = {
   data: []
@@ -66,13 +67,16 @@ const Dashboard = () => {
   const startIndex = (currentPage - 1) * pageSize;
   const paginatedData = filteredData.slice(startIndex, startIndex + pageSize);
 
+  const isMobile = window.innerWidth <= 768;
+
   return (
-    <div style={{ padding: '1rem' }}>
-      <h1>Eco-Monitor Dashboard</h1>
+    <div className='dashboard-container'>
+   <h1 className="dashboard-title">Eco-Monitor Dashboard</h1>
+<p className="dashboard-subtitle">Live environmental data from active sensors</p>
 
       <FilterControls filters={filters} setFilters={setFilters} />
 
-      <div style={{ margin: '1rem 0' }}>
+      <div className="control-bar">
         <button onClick={() => setIsPaused(p => !p)}>
           {isPaused ? '▶ Resume Updates' : '⏸ Pause Updates'}
         </button>
@@ -80,7 +84,6 @@ const Dashboard = () => {
         <select
           value={timeWindow}
           onChange={(e) => setTimeWindow(parseInt(e.target.value))}
-          style={{ marginLeft: '1rem' }}
         >
           <option value={30000}>Last 30 seconds</option>
           <option value={60000}>Last 1 minute</option>
@@ -89,42 +92,29 @@ const Dashboard = () => {
         </select>
       </div>
 
-      <div className="card-grid">
-        {paginatedData.length === 0 ? (
-          <p>No sensor data matches the current filters.</p>
-        ) : (
-          paginatedData.map((item) => (
-            <Card key={`${item.sensorId}-${item.timestamp}`} data={item} />
-          ))
+      <div className="card-section" style={{ maxHeight: 'calc(100vh - 300px)', overflowY: 'auto' }}>
+        {totalPages > 1 && (
+          <div className="pagination sticky-top">
+            <div className={`pagination-controls ${isMobile ? 'mobile' : ''}`}>
+              <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>⏮ First</button>
+              <button onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1}>◀ Prev</button>
+              <span>Page {currentPage} of {totalPages}</span>
+              <button onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}>Next ▶</button>
+              <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>Last ⏭</button>
+            </div>
+          </div>
         )}
+
+        <div className="card-grid">
+          {paginatedData.length === 0 ? (
+            <p>No sensor data matches the current filters.</p>
+          ) : (
+            paginatedData.map((item) => (
+              <Card key={`${item.sensorId}-${item.timestamp}`} data={item} />
+            ))
+          )}
+        </div>
       </div>
-
-    {totalPages > 1 && (
-  <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '0.75rem' }}>
-    <button onClick={() => setCurrentPage(1)} disabled={currentPage === 1}>
-      ⏮ First
-    </button>
-
-    <button onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1}>
-      ◀ Previous
-    </button>
-
-    <span style={{ alignSelf: 'center' }}>
-      Page {currentPage} of {totalPages}
-    </span>
-
-    <button
-      onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
-      disabled={currentPage === totalPages}
-    >
-      Next ▶
-    </button>
-
-    <button onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages}>
-      Last ⏭
-    </button>
-  </div>
-)}
     </div>
   );
 };

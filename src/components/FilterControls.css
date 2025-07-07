@@ -1,0 +1,129 @@
+.filter-controls {
+  margin: 0.75rem auto;
+  padding: 1rem;
+  background: #f6f9fc;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  max-width: 800px;
+  width: 100%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.filter-controls h2 {
+  margin-bottom: 1rem;
+}
+
+.filter-group {
+  margin-bottom: 1.2rem;
+}
+
+.filter-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+/* Sliders */
+.slider-pair {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.slider-pair input[type="range"] {
+  flex: 1;
+}
+
+/* Buttons below sliders */
+.filter-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Preset pill buttons */
+.preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.preset-buttons button {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  background: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preset-buttons button.active {
+  background-color: #1890ff;
+  color: white;
+  border-color: #1890ff;
+}
+
+.preset-buttons button:hover {
+  background-color: #e6f4ff;
+}
+
+/* Critical / reset buttons */
+.btn {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-weight: 500;
+}
+
+.critical-btn {
+  background-color: #ff4d4f;
+  color: white;
+}
+
+.critical-btn:hover {
+  background-color: #d9363e;
+}
+
+.reset-btn {
+  background-color: #1890ff;
+  color: white;
+}
+
+.reset-btn:hover {
+  background-color: #1476d3;
+}
+
+/* 📱 Mobile-specific adjustments */
+@media (max-width: 768px) {
+    .filter-controls {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+  }
+  .filter-group {
+    margin-bottom: 1rem;
+  }
+
+  .slider-pair {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .preset-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .preset-buttons button {
+    width: 100%;
+    max-width: 300px;
+  }
+}

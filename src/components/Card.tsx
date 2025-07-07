@@ -39,7 +39,16 @@ const Card = ({ data }: CardProps) => {
 <div className={`sensor-aqi ${getAqiClass(data.airQuality)}`}>
   <strong>Air Quality:</strong> {data.airQuality} AQI
 </div>
-      <div className="sensor-timestamp"><small>{data.timestamp}</small></div>
+      <div className="sensor-timestamp"><small>
+  {new Date(data.timestamp).toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  })}
+</small></div>
     </div>
   );
 };
