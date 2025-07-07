@@ -105,26 +105,7 @@ npm install
 npm start
 ```
 
-> I tested the dashboard on Chrome and Firefox, including simulated mobile resolutions in dev tools.
 
----
-
-## ✅ Technical Compliance Summary (Based on Challenge Spec)
-
-| Requirement                            | Status |
-| -------------------------------------- | ------ |
-| Simulate real-time sensor updates      | ✅ Done |
-| Visual display of environmental data   | ✅ Done |
-| Filtering by temp/humidity/air quality | ✅ Done |
-| Preset & custom filter options         | ✅ Done |
-| Filter reset / 'All' option            | ✅ Done |
-| Pagination for result sets             | ✅ Done |
-| Collapsible control panel              | ✅ Done |
-| Responsive design (mobile & desktop)   | ✅ Done |
-| Timestamp-based data pruning           | ✅ Done |
-| Pause/resume data stream               | ✅ Done |
-
----
 
 ## 🧑‍💻 Author
 
