@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import './FilterControls.css';
 
+// Type for filter values
 interface Filters {
   temp: { min: number; max: number };
   humidity: { min: number; max: number };
   aqi: { min: number; max: number };
 }
 
+// Props for the FilterControls component
 interface FilterControlsProps {
   filters: Filters;
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
 }
 
+// Default ranges for each filter type
 const DEFAULT_RANGES = {
   temp: { min: 10, max: 40 },
   humidity: { min: 30, max: 90 },
@@ -19,8 +22,10 @@ const DEFAULT_RANGES = {
 };
 
 const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
+  // Collapse filter controls on small screens by default
   const [isCollapsed, setIsCollapsed] = useState(window.innerWidth <= 768);
 
+  // Listen for window resize to auto-expand/collapse controls
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 768 && isCollapsed) {
@@ -31,10 +36,12 @@ const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [isCollapsed]);
 
+  // Track which preset/custom mode is selected for each filter
   const [tempMode, setTempMode] = useState<'all' | 'normal' | 'warm' | 'hot' | 'custom'>('normal');
   const [humidityMode, setHumidityMode] = useState<'all' | 'normal' | 'dry' | 'humid' | 'custom'>('normal');
   const [aqiMode, setAqiMode] = useState<'all' | 'good' | 'moderate' | 'unhealthy' | 'custom'>('good');
 
+  // Apply a preset filter range for a given type and mode
   const applyPreset = (type: 'temp' | 'humidity' | 'aqi', mode: string) => {
     const newFilters = { ...filters };
 
@@ -65,6 +72,7 @@ const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
     setFilters(newFilters);
   };
 
+  // Handle slider changes for custom filter ranges
   const handleCustomSlider = (
     type: 'temp' | 'humidity' | 'aqi',
     bound: 'min' | 'max',
@@ -74,6 +82,7 @@ const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
       const otherBound = bound === 'min' ? 'max' : 'min';
       const otherValue = prev[type][otherBound];
 
+      // Ensure min does not exceed max and vice versa
       const newValue =
         bound === 'min'
           ? Math.min(value, otherValue)
@@ -91,15 +100,17 @@ const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
 
   return (
     <div className="filter-controls">
+      {/* Collapse/expand button */}
       <button className="collapse-toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
         {isCollapsed ? 'Show Filters ⬇' : 'Hide Filters ⬆'}
       </button>
 
+      {/* Filter controls content (hidden if collapsed) */}
       {!isCollapsed && (
         <div className="filter-content">
           <h2>Sensor Filters</h2>
 
-          {/* Temperature */}
+          {/* Temperature filter group */}
           <div className="filter-group">
             <label>Temperature ({filters.temp.min}°C – {filters.temp.max}°C)</label>
             <div className="preset-buttons">
@@ -109,6 +120,7 @@ const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
               <button onClick={() => applyPreset('temp', 'hot')} className={tempMode === 'hot' ? 'active' : ''}>🔴 Hot (&gt;35)</button>
               <button onClick={() => setTempMode('custom')} className={tempMode === 'custom' ? 'active' : ''}>⚙️ Custom</button>
             </div>
+            {/* Custom slider for temperature */}
             {tempMode === 'custom' && (
               <div className="slider-pair">
                 <input type="range" min="10" max="40" value={filters.temp.min}
@@ -119,7 +131,7 @@ const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
             )}
           </div>
 
-          {/* Humidity */}
+          {/* Humidity filter group */}
           <div className="filter-group">
             <label>Humidity ({filters.humidity.min}% – {filters.humidity.max}%)</label>
             <div className="preset-buttons">
@@ -129,6 +141,7 @@ const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
               <button onClick={() => applyPreset('humidity', 'humid')} className={humidityMode === 'humid' ? 'active' : ''}>🔴 Humid (&gt;60)</button>
               <button onClick={() => setHumidityMode('custom')} className={humidityMode === 'custom' ? 'active' : ''}>⚙️ Custom</button>
             </div>
+            {/* Custom slider for humidity */}
             {humidityMode === 'custom' && (
               <div className="slider-pair">
                 <input type="range" min="30" max="90" value={filters.humidity.min}
@@ -139,7 +152,7 @@ const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
             )}
           </div>
 
-          {/* AQI */}
+          {/* AQI filter group */}
           <div className="filter-group">
             <label>Air Quality Index (AQI) ({filters.aqi.min} – {filters.aqi.max})</label>
             <div className="preset-buttons">
@@ -149,6 +162,7 @@ const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
               <button onClick={() => applyPreset('aqi', 'unhealthy')} className={aqiMode === 'unhealthy' ? 'active' : ''}>🔴 Unhealthy (&gt;100)</button>
               <button onClick={() => setAqiMode('custom')} className={aqiMode === 'custom' ? 'active' : ''}>⚙️ Custom</button>
             </div>
+            {/* Custom slider for AQI */}
             {aqiMode === 'custom' && (
               <div className="slider-pair">
                 <input type="range" min="0" max="200" value={filters.aqi.min}
