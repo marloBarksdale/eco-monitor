@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './FilterControls.css';
 
 interface Filters {
@@ -19,6 +19,18 @@ const DEFAULT_RANGES = {
 };
 
 const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
+  const [isCollapsed, setIsCollapsed] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && isCollapsed) {
+        setIsCollapsed(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isCollapsed]);
+
   const [tempMode, setTempMode] = useState<'all' | 'normal' | 'warm' | 'hot' | 'custom'>('normal');
   const [humidityMode, setHumidityMode] = useState<'all' | 'normal' | 'dry' | 'humid' | 'custom'>('normal');
   const [aqiMode, setAqiMode] = useState<'all' | 'good' | 'moderate' | 'unhealthy' | 'custom'>('good');
@@ -79,67 +91,75 @@ const FilterControls = ({ filters, setFilters }: FilterControlsProps) => {
 
   return (
     <div className="filter-controls">
-      <h2>Sensor Filters</h2>
+      <button className="collapse-toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
+        {isCollapsed ? 'Show Filters ⬇' : 'Hide Filters ⬆'}
+      </button>
 
-      {/* Temperature */}
-      <div className="filter-group">
-        <label>Temperature ({filters.temp.min}°C – {filters.temp.max}°C)</label>
-        <div className="preset-buttons">
-          <button onClick={() => applyPreset('temp', 'all')} className={tempMode === 'all' ? 'active' : ''}>🌍 All</button>
-          <button onClick={() => applyPreset('temp', 'normal')} className={tempMode === 'normal' ? 'active' : ''}>🟢 Normal (18–28)</button>
-          <button onClick={() => applyPreset('temp', 'warm')} className={tempMode === 'warm' ? 'active' : ''}>🔶 Warm (28–35)</button>
-          <button onClick={() => applyPreset('temp', 'hot')} className={tempMode === 'hot' ? 'active' : ''}>🔴 Hot (&gt;35)</button>
-          <button onClick={() => setTempMode('custom')} className={tempMode === 'custom' ? 'active' : ''}>⚙️ Custom</button>
-        </div>
-        {tempMode === 'custom' && (
-          <div className="slider-pair">
-            <input type="range" min="10" max="40" value={filters.temp.min}
-              onChange={e => handleCustomSlider('temp', 'min', Number(e.target.value))} />
-            <input type="range" min="10" max="40" value={filters.temp.max}
-              onChange={e => handleCustomSlider('temp', 'max', Number(e.target.value))} />
-          </div>
-        )}
-      </div>
+      {!isCollapsed && (
+        <div className="filter-content">
+          <h2>Sensor Filters</h2>
 
-      {/* Humidity */}
-      <div className="filter-group">
-        <label>Humidity ({filters.humidity.min}% – {filters.humidity.max}%)</label>
-        <div className="preset-buttons">
-          <button onClick={() => applyPreset('humidity', 'all')} className={humidityMode === 'all' ? 'active' : ''}>🌍 All</button>
-          <button onClick={() => applyPreset('humidity', 'normal')} className={humidityMode === 'normal' ? 'active' : ''}>🟢 Normal (40–60)</button>
-          <button onClick={() => applyPreset('humidity', 'dry')} className={humidityMode === 'dry' ? 'active' : ''}>🔵 Dry (&lt;40)</button>
-          <button onClick={() => applyPreset('humidity', 'humid')} className={humidityMode === 'humid' ? 'active' : ''}>🔴 Humid (&gt;60)</button>
-          <button onClick={() => setHumidityMode('custom')} className={humidityMode === 'custom' ? 'active' : ''}>⚙️ Custom</button>
-        </div>
-        {humidityMode === 'custom' && (
-          <div className="slider-pair">
-            <input type="range" min="30" max="90" value={filters.humidity.min}
-              onChange={e => handleCustomSlider('humidity', 'min', Number(e.target.value))} />
-            <input type="range" min="30" max="90" value={filters.humidity.max}
-              onChange={e => handleCustomSlider('humidity', 'max', Number(e.target.value))} />
+          {/* Temperature */}
+          <div className="filter-group">
+            <label>Temperature ({filters.temp.min}°C – {filters.temp.max}°C)</label>
+            <div className="preset-buttons">
+              <button onClick={() => applyPreset('temp', 'all')} className={tempMode === 'all' ? 'active' : ''}>🌍 All</button>
+              <button onClick={() => applyPreset('temp', 'normal')} className={tempMode === 'normal' ? 'active' : ''}>🟢 Normal (18–28)</button>
+              <button onClick={() => applyPreset('temp', 'warm')} className={tempMode === 'warm' ? 'active' : ''}>🔶 Warm (28–35)</button>
+              <button onClick={() => applyPreset('temp', 'hot')} className={tempMode === 'hot' ? 'active' : ''}>🔴 Hot (&gt;35)</button>
+              <button onClick={() => setTempMode('custom')} className={tempMode === 'custom' ? 'active' : ''}>⚙️ Custom</button>
+            </div>
+            {tempMode === 'custom' && (
+              <div className="slider-pair">
+                <input type="range" min="10" max="40" value={filters.temp.min}
+                  onChange={e => handleCustomSlider('temp', 'min', Number(e.target.value))} />
+                <input type="range" min="10" max="40" value={filters.temp.max}
+                  onChange={e => handleCustomSlider('temp', 'max', Number(e.target.value))} />
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      {/* AQI */}
-      <div className="filter-group">
-        <label>Air Quality Index (AQI) ({filters.aqi.min} – {filters.aqi.max})</label>
-        <div className="preset-buttons">
-          <button onClick={() => applyPreset('aqi', 'all')} className={aqiMode === 'all' ? 'active' : ''}>🌍 All</button>
-          <button onClick={() => applyPreset('aqi', 'good')} className={aqiMode === 'good' ? 'active' : ''}>🟢 Good (0–50)</button>
-          <button onClick={() => applyPreset('aqi', 'moderate')} className={aqiMode === 'moderate' ? 'active' : ''}>🟡 Moderate (51–100)</button>
-          <button onClick={() => applyPreset('aqi', 'unhealthy')} className={aqiMode === 'unhealthy' ? 'active' : ''}>🔴 Unhealthy (&gt;100)</button>
-          <button onClick={() => setAqiMode('custom')} className={aqiMode === 'custom' ? 'active' : ''}>⚙️ Custom</button>
-        </div>
-        {aqiMode === 'custom' && (
-          <div className="slider-pair">
-            <input type="range" min="0" max="200" value={filters.aqi.min}
-              onChange={e => handleCustomSlider('aqi', 'min', Number(e.target.value))} />
-            <input type="range" min="0" max="200" value={filters.aqi.max}
-              onChange={e => handleCustomSlider('aqi', 'max', Number(e.target.value))} />
+          {/* Humidity */}
+          <div className="filter-group">
+            <label>Humidity ({filters.humidity.min}% – {filters.humidity.max}%)</label>
+            <div className="preset-buttons">
+              <button onClick={() => applyPreset('humidity', 'all')} className={humidityMode === 'all' ? 'active' : ''}>🌍 All</button>
+              <button onClick={() => applyPreset('humidity', 'normal')} className={humidityMode === 'normal' ? 'active' : ''}>🟢 Normal (40–60)</button>
+              <button onClick={() => applyPreset('humidity', 'dry')} className={humidityMode === 'dry' ? 'active' : ''}>🔵 Dry (&lt;40)</button>
+              <button onClick={() => applyPreset('humidity', 'humid')} className={humidityMode === 'humid' ? 'active' : ''}>🔴 Humid (&gt;60)</button>
+              <button onClick={() => setHumidityMode('custom')} className={humidityMode === 'custom' ? 'active' : ''}>⚙️ Custom</button>
+            </div>
+            {humidityMode === 'custom' && (
+              <div className="slider-pair">
+                <input type="range" min="30" max="90" value={filters.humidity.min}
+                  onChange={e => handleCustomSlider('humidity', 'min', Number(e.target.value))} />
+                <input type="range" min="30" max="90" value={filters.humidity.max}
+                  onChange={e => handleCustomSlider('humidity', 'max', Number(e.target.value))} />
+              </div>
+            )}
           </div>
-        )}
-      </div>
+
+          {/* AQI */}
+          <div className="filter-group">
+            <label>Air Quality Index (AQI) ({filters.aqi.min} – {filters.aqi.max})</label>
+            <div className="preset-buttons">
+              <button onClick={() => applyPreset('aqi', 'all')} className={aqiMode === 'all' ? 'active' : ''}>🌍 All</button>
+              <button onClick={() => applyPreset('aqi', 'good')} className={aqiMode === 'good' ? 'active' : ''}>🟢 Good (0–50)</button>
+              <button onClick={() => applyPreset('aqi', 'moderate')} className={aqiMode === 'moderate' ? 'active' : ''}>🟡 Moderate (51–100)</button>
+              <button onClick={() => applyPreset('aqi', 'unhealthy')} className={aqiMode === 'unhealthy' ? 'active' : ''}>🔴 Unhealthy (&gt;100)</button>
+              <button onClick={() => setAqiMode('custom')} className={aqiMode === 'custom' ? 'active' : ''}>⚙️ Custom</button>
+            </div>
+            {aqiMode === 'custom' && (
+              <div className="slider-pair">
+                <input type="range" min="0" max="200" value={filters.aqi.min}
+                  onChange={e => handleCustomSlider('aqi', 'min', Number(e.target.value))} />
+                <input type="range" min="0" max="200" value={filters.aqi.max}
+                  onChange={e => handleCustomSlider('aqi', 'max', Number(e.target.value))} />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
