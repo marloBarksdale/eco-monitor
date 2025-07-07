@@ -1,4 +1,5 @@
 # Eco-Monitor Dashboard
+https://marlobarksdale.github.io/eco-monitor/
 
 A responsive, real-time environmental monitoring dashboard that I built using React and TypeScript. It simulates live sensor data and provides flexible filtering, clear data visualization, and mobile-first performance.
 
@@ -74,7 +75,7 @@ This dashboard displays simulated sensor readings (Temperature, Humidity, and AQ
 
 ### 📱 Mobile Optimization
 
-* I designed pagination to be horizontally scrollable on mobile
+
 * Filter controls collapse automatically
 * Cards remain scrollable underneath sticky controls
 
