@@ -1,46 +1,136 @@
-# Getting Started with Create React App
+# Eco-Monitor Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A responsive, real-time environmental monitoring dashboard that I built using React and TypeScript. It simulates live sensor data and provides flexible filtering, clear data visualization, and mobile-first performance.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🌐 Project Overview
 
-### `npm start`
+This dashboard displays simulated sensor readings (Temperature, Humidity, and AQI) with the following goals:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+* Provide **live updates** from a simulated sensor array
+* Allow **real-time filtering** by environmental parameters
+* Maintain **performance** on both desktop and mobile
+* Support **data pruning** by user-defined time windows
+* Meet the technical spec of a front-end systems engineering challenge
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+## 🔧 Key Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### ✅ Real-Time Data Simulation
 
-### `npm run build`
+* I use `SimulateRealTimeData` to push new sensor readings every second
+* 100 sensors continuously emit data
+* Data is pruned by a sliding window (30s to 10min)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### ✅ Sensor Card Display
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Each card shows temperature, humidity, and AQI
+* Color-coded indicators (green, yellow, red) reflect severity
+* Responsive grid layout:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  * **Desktop**: multiple columns
+  * **Mobile**: scrollable, fewer cards visible at once
 
-### `npm run eject`
+### ✅ Filtering System
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+* **Three filter categories**: Temperature, Humidity, AQI
+* **Preset buttons** for quick selection:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  * e.g., "Normal", "Warm", "Hot" for temperature
+* **Custom sliders** with two-sided range control
+* **All buttons** reset the filter to the full expected range based on simulated data
+* **Collapsible filter panel**:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  * Saves space on mobile, visible by default on desktop
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### ✅ Pagination
 
-## Learn More
+* Limits display to 12 records per page
+* Fully responsive layout:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  * Buttons shrink and scroll on mobile
+* Includes navigation: First, Prev, Next, and Last
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### ✅ Pause/Resume + Time Window
+
+* Pause button halts updates while keeping current data visible
+* Dropdown allows users to select time window (30s, 1min, 5min, 10min)
+
+---
+
+## 🧠 Design Considerations
+
+### 🔄 State Management
+
+* I use `useReducer` to efficiently handle streaming updates
+* All incoming data is timestamped and pruned based on the time window
+
+### 💾 Memory Safety
+
+* Data is kept in memory only as long as needed
+* No external logging or local storage is used
+
+### 📱 Mobile Optimization
+
+* I designed pagination to be horizontally scrollable on mobile
+* Filter controls collapse automatically
+* Cards remain scrollable underneath sticky controls
+
+### 🎯 Decision Rationale
+
+| Feature                                 | Why I Chose It                                                                |
+| --------------------------------------- | ----------------------------------------------------------------------------- |
+| Time window pruning (30s–10min)         | Prevents excessive memory use and keeps the data focused on recent conditions |
+| Limit of 12 cards per page              | Balances readability with performance, especially on low-power mobile devices |
+| Filter presets with "All" option        | Makes it easy to quickly explore sensor ranges or clear all filters at once   |
+| Range sliders                           | Gives fine-tuned control while avoiding invalid filter combinations           |
+| Sticky layout for pagination & controls | Keeps core navigation visible without blocking the grid                       |
+| Pause/resume toggle                     | Allows temporary inspection of data without it changing beneath the user      |
+
+---
+
+
+
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone <repo>
+cd eco-monitor-dashboard
+npm install
+npm start
+```
+
+> I tested the dashboard on Chrome and Firefox, including simulated mobile resolutions in dev tools.
+
+---
+
+## ✅ Technical Compliance Summary (Based on Challenge Spec)
+
+| Requirement                            | Status |
+| -------------------------------------- | ------ |
+| Simulate real-time sensor updates      | ✅ Done |
+| Visual display of environmental data   | ✅ Done |
+| Filtering by temp/humidity/air quality | ✅ Done |
+| Preset & custom filter options         | ✅ Done |
+| Filter reset / 'All' option            | ✅ Done |
+| Pagination for result sets             | ✅ Done |
+| Collapsible control panel              | ✅ Done |
+| Responsive design (mobile & desktop)   | ✅ Done |
+| Timestamp-based data pruning           | ✅ Done |
+| Pause/resume data stream               | ✅ Done |
+
+---
+
+## 🧑‍💻 Author
+
+Lynden Flood
+
+---
+
+## 📄 License
+
+MIT — Free to use, share, modify.
