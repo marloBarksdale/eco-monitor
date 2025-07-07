@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/eco-monitor/static/css/main.88e28dc7.css",
-    "main.js": "/eco-monitor/static/js/main.d6b1edb4.js",
+    "main.js": "/eco-monitor/static/js/main.ca78d529.js",
     "index.html": "/eco-monitor/index.html",
     "main.88e28dc7.css.map": "/eco-monitor/static/css/main.88e28dc7.css.map",
-    "main.d6b1edb4.js.map": "/eco-monitor/static/js/main.d6b1edb4.js.map"
+    "main.ca78d529.js.map": "/eco-monitor/static/js/main.ca78d529.js.map"
   },
   "entrypoints": [
     "static/css/main.88e28dc7.css",
-    "static/js/main.d6b1edb4.js"
+    "static/js/main.ca78d529.js"
   ]
 }
